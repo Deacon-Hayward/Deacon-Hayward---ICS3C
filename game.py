@@ -17,6 +17,9 @@ RED = (255, 0, 0)
 GREEN = (0, 200, 0)
 BLACK = (0, 0, 0)
 
+# Records Time
+ticks = pygame.time.get_ticks()
+
 # Set up the player
 player_x = 30
 player_y = 100
@@ -27,7 +30,7 @@ speed = 3
 enemy_x = 30
 enemy_y = 5
 enemy_size = 25
-enemy_speed = 1
+enemy_speed = 1.5
 
 # Create the exit
 exit_rect = pygame.Rect(540, 340, 30, 30)
@@ -43,6 +46,7 @@ walls = [
 
 # Set up the game
 clock = pygame.time.Clock()
+font = pygame.font.Font(None, 36)
 running = True
 won = False
 
@@ -54,6 +58,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    time_passed = (pygame.time.get_ticks() - ticks) // 1000
+    minutes = ticks // 60
+    seconds = ticks % 60
+    timer_text = f"Time: {minutes:02d}:{seconds:02d}"
+    text_surface = font.render(timer_text, True, (0, 0, 0))
+    screen.blit(text_surface, (10, 10))
+    pygame.display.flip()
     # Get the keys being pressed
     keys = pygame.key.get_pressed()
 
@@ -130,40 +141,40 @@ while running:
 
         # Update the player rectangle
         player = pygame.Rect(player_x, player_y, player_size, player_size)
+
+        # Enemy wall collison
+        old_enemy_x = enemy_x
+        if enemy_x < player_x:
+            enemy_x += enemy_speed
+        elif enemy_x > player_x:
+            enemy_x -= enemy_speed
+
         enemy_rect = pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size)
+        for wall in walls:
+            if enemy_rect.colliderect(wall):
+                enemy_x = old_enemy_x
+
+
+        old_enemy_y = enemy_y
+        if enemy_y < player_y:
+            enemy_y += enemy_speed
+        elif enemy_y > player_y:
+            enemy_y -= enemy_speed
+
+        enemy_rect = pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size)
+        for wall in walls:
+            if enemy_rect.colliderect(wall):
+                enemy_y = old_enemy_y
+
         # Check if the player touches the enemy
         if player.colliderect(enemy_rect):
+            enemy_y -= enemy_speed
             font = pygame.font.SysFont(None, 48)
             message = font.render("YOU LOSE!", True, RED)
             screen.blit(message, (220, 180))
             pygame.display.flip()
             pygame.time.wait (2000)
             running = False
-
-        # Makes enemy collide with wall
-        if enemy_x < player_x:
-            enemy_x += enemy_speed
-        elif enemy_x > player_x:
-            enemy_x -= enemy_speed
-        if enemy_y < player_y:
-            enemy_y += enemy_speed
-        elif enemy_y < player_y:
-            enemy_y -= enemy_speed
-    enemy_rect = pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_speed)
-    for wall in walls:
-        if enemy_rect.colliderect(wall):
-            enemy_y = enemy_x
-
-
-        # Makes enemy chase player
-    if enemy_x < player_x:         
-        enemy_x += enemy_speed     
-    elif enemy_x > player_x:         
-        enemy_x -= enemy_speed     
-    if enemy_y < player_y:         
-        enemy_y += enemy_speed     
-    elif enemy_y > player_y:         
-        enemy_y -= enemy_speed  
 
         # Check if the player reaches the exit
         if player.colliderect(exit_rect):
@@ -190,8 +201,6 @@ while running:
         font = pygame.font.SysFont(None, 48)
         message = font.render("YOU WIN!", True, GREEN)
         screen.blit(message, (220, 180))
-        
-
 
     # Update the display
     pygame.display.flip()
