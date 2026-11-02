@@ -3,8 +3,8 @@ import pygame
 pygame.init()
 
 # Set screen resolution
-SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 400
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600 
 
 # Create the game window
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -16,6 +16,7 @@ BLUE = (0, 0, 200)
 RED = (255, 0, 0)
 GREEN = (0, 200, 0)
 BLACK = (0, 0, 0)
+SKYBLUE = (135, 206, 235)
 
 # Records Time
 ticks = pygame.time.get_ticks()
@@ -38,10 +39,7 @@ exit_rect = pygame.Rect(540, 340, 30, 30)
 # Create the maze walls
 walls = [
     pygame.Rect(100, 0, 20, 300),
-    pygame.Rect(200, 100, 20, 300),
-    pygame.Rect(300, 0, 20, 250),
-    pygame.Rect(400, 100, 20, 300),
-    pygame.Rect(500, 0, 20, 250)
+    
 ]
 
 # Set up the game
@@ -49,6 +47,8 @@ clock = pygame.time.Clock()
 font = pygame.font.Font(None, 36)
 running = True
 won = False
+game_over = False
+final_time_text = ""
 
 # Main game loop
 while running:
@@ -58,13 +58,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    time_passed = (pygame.time.get_ticks() - ticks) // 1000
-    minutes = ticks // 60
-    seconds = ticks % 60
-    timer_text = f"Time: {minutes:02d}:{seconds:02d}"
-    text_surface = font.render(timer_text, True, (0, 0, 0))
-    screen.blit(text_surface, (10, 10))
-    pygame.display.flip()
+    
     # Get the keys being pressed
     keys = pygame.key.get_pressed()
 
@@ -181,7 +175,7 @@ while running:
             won = True
 
     # Draw the background
-    screen.fill(WHITE)
+    screen.fill(SKYBLUE)
 
     # Draw the maze walls
     for wall in walls:
@@ -195,6 +189,19 @@ while running:
     pygame.draw.rect(screen, RED, player)
     enemy = pygame.Rect(enemy_x, enemy_y, enemy_size, enemy_size)
     pygame.draw.rect(screen, BLACK, enemy)
+
+    # Calculate and display timer
+    if not won and not game_over:
+        time_passed = (pygame.time.get_ticks() - ticks) // 1000
+        minutes = time_passed // 60
+        seconds = time_passed % 60
+        timer_text = f"Time: {minutes:02d}:{seconds:02d}"
+        final_time_text = timer_text
+    else:
+        timer_text = final_time_text
+
+    text_surface = font.render(timer_text, True, (0, 0, 0))
+    screen.blit(text_surface, (10, 10))
 
     # Display the winning message
     if won:
