@@ -73,7 +73,7 @@ walls = [
     pygame.Rect(575, 275, 100, 20),
     pygame.Rect(675, 145, 20, 150),
     pygame.Rect(675, 275, 50, 20),
-    pygame.Rect(525, 350, 200, 20),
+    pygame.Rect(525, 350, 100, 20),
 ]
 
 # Walls lever opens
@@ -107,7 +107,7 @@ while running:
         if keys[pygame.K_LEFT]:
             player_x -= speed
             player = pygame.Rect(player_x, player_y, player_size, player_size)
-
+            #
             for wall in walls:
                 if player.colliderect(wall):
                     font = pygame.font.SysFont(None, 48)
