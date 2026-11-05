@@ -17,6 +17,7 @@ RED = (255, 0, 0)
 GREEN = (0, 200, 0)
 BLACK = (0, 0, 0)
 SKYBLUE = (135, 206, 235)
+ORANGE = (255, 165, 0)
 
 # Records Time
 ticks = pygame.time.get_ticks()
@@ -29,17 +30,55 @@ speed = 3
 
 # Set up the enemy
 enemy_x = 30
-enemy_y = 5
+enemy_y = 30
 enemy_size = 25
 enemy_speed = 1.5
 
 # Create the exit
-exit_rect = pygame.Rect(540, 340, 30, 30)
+exit_rect = pygame.Rect(740, 540, 30, 30)
+
+# Create the lever
+lever_rect = pygame.Rect(47, 525, 30, 30)
+lever_activated = False
+
 
 # Create the maze walls
 walls = [
-    pygame.Rect(100, 0, 20, 300),
-    
+    #outside walls
+    pygame.Rect(0, 0, 800, 20),
+    pygame.Rect(0, 580, 800, 20),
+    pygame.Rect(0, 0, 20, 600),
+    pygame.Rect(780, 0, 20, 600),
+
+    #inside walls
+    pygame.Rect(75, 100, 200, 20),
+    pygame.Rect(375, 100, 200, 20),
+    pygame.Rect(75, 200, 100, 20),
+    pygame.Rect(175, 200, 20, 100),
+    pygame.Rect(100, 375, 100, 20),
+    pygame.Rect(100, 375, 20, 140),
+    pygame.Rect(20, 300, 300, 20),
+    pygame.Rect(100, 500, 200, 20),
+    pygame.Rect(300, 300, 20, 125),
+    pygame.Rect(270, 425, 50, 20),
+    pygame.Rect(185, 375, 20, 50),
+    pygame.Rect(260, 200, 150, 20),
+    pygame.Rect(400, 200, 20, 150),
+    pygame.Rect(400, 425, 20, 175),
+    pygame.Rect(400, 425, 125, 20),
+    pygame.Rect(505, 175, 20, 250),
+    pygame.Rect(225, 550, 20, 50),
+    pygame.Rect(475, 15, 20, 100),
+    pygame.Rect(575, 75, 20, 200),
+    pygame.Rect(575, 275, 100, 20),
+    pygame.Rect(675, 145, 20, 150),
+    pygame.Rect(675, 275, 50, 20),
+    pygame.Rect(525, 350, 200, 20),
+]
+
+# Walls lever opens
+orange_walls = [
+    pygame.Rect(505, 120, 20, 75)
 ]
 
 # Set up the game
@@ -77,6 +116,17 @@ while running:
                     pygame.display.flip()
                     pygame.time.wait (2000)
                     running = False
+            if not lever_activated:
+                for o_walls in orange_walls:
+                    if player.colliderect(o_walls):
+                        font = pygame.font.SysFont(None, 48)
+                        message = font.render("YOU LOSE!", True, RED)
+                        screen.blit(message, (220, 180))
+                        pygame.display.flip()
+                        pygame.time.wait (2000)
+                        running = False
+
+
         # Move right
         if keys[pygame.K_RIGHT]:
             player_x += speed
@@ -90,6 +140,15 @@ while running:
                     pygame.display.flip()
                     pygame.time.wait (2000)
                     running = False
+            if not lever_activated:
+                for o_walls in orange_walls:
+                    if player.colliderect(o_walls):
+                        font = pygame.font.SysFont(None, 48)
+                        message = font.render("YOU LOSE!", True, RED)
+                        screen.blit(message, (220, 180))
+                        pygame.display.flip()
+                        pygame.time.wait (2000)
+                        running = False
 
 
         # Move up
@@ -105,6 +164,15 @@ while running:
                     pygame.display.flip()
                     pygame.time.wait (2000)
                     running = False
+            if not lever_activated:
+                    for o_walls in orange_walls:
+                        if player.colliderect(o_walls):
+                            font = pygame.font.SysFont(None, 48)
+                            message = font.render("YOU LOSE!", True, RED)
+                            screen.blit(message, (220, 180))
+                            pygame.display.flip()
+                            pygame.time.wait (2000)
+                            running = False
 
         # Move down
         if keys[pygame.K_DOWN]:
@@ -119,6 +187,15 @@ while running:
                     pygame.display.flip()
                     pygame.time.wait (2000)
                     running = False
+            if not lever_activated:
+                for o_walls in orange_walls:
+                    if player.colliderect(o_walls):
+                        font = pygame.font.SysFont(None, 48)
+                        message = font.render("YOU LOSE!", True, RED)
+                        screen.blit(message, (220, 180))
+                        pygame.display.flip()
+                        pygame.time.wait (2000)
+                        running = False
 
         # Keep the player inside the screen
         if player_x < 0:
@@ -170,6 +247,10 @@ while running:
             pygame.time.wait (2000)
             running = False
 
+        # Check if the player reaches the lever
+        if player.colliderect(lever_rect):
+            lever_activated = True
+
         # Check if the player reaches the exit
         if player.colliderect(exit_rect):
             won = True
@@ -177,12 +258,22 @@ while running:
     # Draw the background
     screen.fill(SKYBLUE)
 
-    # Draw the maze walls
+    #  Blue walls
     for wall in walls:
         pygame.draw.rect(screen, BLUE, wall)
 
+    # Orange walls if lever is not flipped
+    if not lever_activated:
+        for o_walls in orange_walls:
+            pygame.draw.rect (screen, ORANGE, o_walls)
+        
+
     # Draw the exit
     pygame.draw.rect(screen, GREEN, exit_rect)
+
+    # Draw the lever if not activated
+    if not lever_activated:
+        pygame.draw.rect(screen, ORANGE, lever_rect)
 
     # Draw the player and enemy
     player = pygame.Rect(player_x, player_y, player_size, player_size)
