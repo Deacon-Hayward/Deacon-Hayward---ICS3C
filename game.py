@@ -1,4 +1,5 @@
-import pygame
+import pygame, sys
+from button import Button
 
 pygame.init()
 
@@ -18,6 +19,106 @@ GREEN = (0, 200, 0)
 BLACK = (0, 0, 0)
 SKYBLUE = (135, 206, 235)
 ORANGE = (255, 165, 0)
+
+#Play screen used youtube video, https://youtu.be/GMBqjxcKogA?si=cQ57FwoG5ois49VM
+BG = pygame.image.load("assets/Background.png")
+def get_font(size):
+    return pygame.font.Font("assets/font.ttf", size)
+
+def play():
+    pygame.display.set_caption("Play")
+
+    while true:
+        PLAY_MOUSE_POS = pygame.mouse.get_pos()
+
+        screen.fill("BLACK")
+
+        PLAY_TEXT = get_font(45).render("This is the PLAY screen")
+        PLAY_RECT = PLAY_TEXT.get_rect(center=(640,260))
+        SCREEN.blit(PLAY_TEXT, PLAY_RECT)
+
+        PLAY_BACK = Button(image=None, pis=(640, 260),
+                            text_input="BLACK", font=get_font(75), base_color="WHITE", hovering_color="GREEN")
+
+        PLAY_BACK.changeColor(PLAY_MOUSE_POS)
+        PLAY_BACK.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
+
+def options():
+    pygame.display.sey_caption("Options")
+
+    while true:
+        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+        screen.fill(WHITE)
+
+        OPTIONS_TEXT = get_font(45).render("This is OPTIONS screen.")
+        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
+        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
+
+        OPTIONS_BACK = Button(image=None, pos=(640,460),
+                            text_input="BACK", font=get_font(75), base_color="BLACK", hovering_color="GREEN")
+        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
+        OPTIONS_BACK.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
+
+def main_menu():
+    pygame.display.set_caption("Menu")
+
+    while true:
+        SCREEN.blit(BG, (0, 0))
+        
+        MENU_MOUSE_POS = pygame.mouse.get_pos()
+
+        MENU_TEXT = get_font(100).render("MAIN MENU", True,"#b68f40")
+        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+
+        PLAY_BUTTON = Button(image=pygame.image.load("assets/Play Rect.png"), pos=(640, 250),
+                            text_input="PLAY", font=get_font(75), base_color="#d7fcd4", hovering_color="WHITE")
+        OPTIONS_BUTTON = BUTTON(image=pygame.image.load("assets/Options Rect.png"), pos=(640, 400),
+                            text_input="OPTIONS", font=get_font(75), base_color="#d7fcd4", hovering_color="WHITE")
+        QUIT_BUTTON = Button(image=pygame.image.load("assets/Quit Rect.png"), pos=(640, 550),
+                            text_input="QUIT", font=get_font(75), base_color="#d7fcd4", hovering_color="WHITE")
+
+        SCREEN.blit(MENU_TEXT, MENU_RECT)
+
+        for button in [PLAY_BUTTON, OPTIONS_BUTTON, QUIT_BUTTON]:
+            button.changeColor(MENU_MOUSE_POS)
+            button.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if PLAY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    play()
+                if OPTIONS_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    options()
+                if QUIT_BUTTON.checkForInput(MENU_MOUSE_POS):
+                    pygame.quit()
+                    sys.exit()
+
+        pygame.display.update()
+main_menu()
 
 # Records Time
 ticks = pygame.time.get_ticks()
@@ -74,6 +175,12 @@ walls = [
     pygame.Rect(675, 145, 20, 150),
     pygame.Rect(675, 275, 50, 20),
     pygame.Rect(525, 350, 100, 20),
+    pygame.Rect(600, 425, 20, 100),
+    pygame.Rect(600, 425, 100, 20),
+    pygame.Rect(680, 500, 100, 20),
+    pygame.Rect(520, 525, 100, 20),
+    pygame.Rect(520, 495, 20, 30),
+    pygame.Rect(680, 425, 100, 20),
 ]
 
 # Walls lever opens
