@@ -168,6 +168,7 @@ def game():
                             font = pygame.font.SysFont(None, 48)
                             message = font.render("YOU LOSE!", True, RED)
                             screen.blit(message, (220, 180))
+                            trigger_jumpscare()
                             pygame.display.flip()
                             running = False
 
@@ -191,6 +192,7 @@ def game():
                                 font = pygame.font.SysFont(None, 48)
                                 message = font.render("YOU LOSE!", True, RED)
                                 screen.blit(message, (220, 180))
+                                trigger_jumpscare()
                                 pygame.display.flip()
                                 running = False
 
@@ -213,6 +215,7 @@ def game():
                             font = pygame.font.SysFont(None, 48)
                             message = font.render("YOU LOSE!", True, RED)
                             screen.blit(message, (220, 180))
+                            trigger_jumpscare()
                             pygame.display.flip()
                             running = False
 
@@ -264,7 +267,6 @@ def game():
                 screen.blit(message, (220, 180))
                 trigger_jumpscare()
                 pygame.display.flip()
-                pygame.time.wait (2000)
                 running = False
 
             # Check if the player reaches the lever
@@ -418,4 +420,3 @@ def main_menu():
 
         pygame.display.update()
 main_menu()
-
