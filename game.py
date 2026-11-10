@@ -21,6 +21,19 @@ BLACK = (0, 0, 0)
 SKYBLUE = (135, 206, 235)
 ORANGE = (255, 165, 0)
 
+
+JUMPSCARE_IMG = pygame.image.load("assets/Brimley.png")
+JUMPSCARE_IMG = pygame.transform.scale(JUMPSCARE_IMG, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+def trigger_jumpscare():
+    if JUMPSCARE_IMG:
+        SCREEN.blit(JUMPSCARE_IMG, (0, 0))
+    else:
+        SCREEN.fill(RED)
+        
+    pygame.display.update()
+    pygame.time.delay(2000)
+
 def game():
     # Records Time
     ticks = pygame.time.get_ticks()
@@ -122,8 +135,8 @@ def game():
                         font = pygame.font.SysFont(None, 48)
                         message = font.render("YOU LOSE!", True, RED)
                         screen.blit(message, (220, 180))
+                        trigger_jumpscare()
                         pygame.display.flip()
-                        pygame.time.wait (2000)
                         running = False
                 if not lever_activated:
                     for o_walls in orange_walls:
@@ -131,8 +144,8 @@ def game():
                             font = pygame.font.SysFont(None, 48)
                             message = font.render("YOU LOSE!", True, RED)
                             screen.blit(message, (220, 180))
+                            trigger_jumpscare()
                             pygame.display.flip()
-                            pygame.time.wait (2000)
                             running = False
 
 
@@ -146,8 +159,8 @@ def game():
                         font = pygame.font.SysFont(None, 48)
                         message = font.render("YOU LOSE!", True, RED)
                         screen.blit(message, (220, 180))
+                        trigger_jumpscare()
                         pygame.display.flip()
-                        pygame.time.wait (2000)
                         running = False
                 if not lever_activated:
                     for o_walls in orange_walls:
@@ -156,7 +169,6 @@ def game():
                             message = font.render("YOU LOSE!", True, RED)
                             screen.blit(message, (220, 180))
                             pygame.display.flip()
-                            pygame.time.wait (2000)
                             running = False
 
 
@@ -170,8 +182,8 @@ def game():
                         font = pygame.font.SysFont(None, 48)
                         message = font.render("YOU LOSE!", True, RED)
                         screen.blit(message, (220, 180))
+                        trigger_jumpscare()
                         pygame.display.flip()
-                        pygame.time.wait (2000)
                         running = False
                 if not lever_activated:
                         for o_walls in orange_walls:
@@ -180,7 +192,6 @@ def game():
                                 message = font.render("YOU LOSE!", True, RED)
                                 screen.blit(message, (220, 180))
                                 pygame.display.flip()
-                                pygame.time.wait (2000)
                                 running = False
 
             # Move down
@@ -193,8 +204,8 @@ def game():
                         font = pygame.font.SysFont(None, 48)
                         message = font.render("YOU LOSE!", True, RED)
                         screen.blit(message, (220, 180))
+                        trigger_jumpscare()
                         pygame.display.flip()
-                        pygame.time.wait (2000)
                         running = False
                 if not lever_activated:
                     for o_walls in orange_walls:
@@ -203,7 +214,6 @@ def game():
                             message = font.render("YOU LOSE!", True, RED)
                             screen.blit(message, (220, 180))
                             pygame.display.flip()
-                            pygame.time.wait (2000)
                             running = False
 
             # Keep the player inside the screen
@@ -252,6 +262,7 @@ def game():
                 font = pygame.font.SysFont(None, 48)
                 message = font.render("YOU LOSE!", True, RED)
                 screen.blit(message, (220, 180))
+                trigger_jumpscare()
                 pygame.display.flip()
                 pygame.time.wait (2000)
                 running = False
@@ -354,7 +365,7 @@ def options():
         SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
         OPTIONS_BACK = Button(image=None, pos=(640,460),
-                            text_input="BACK", font=get_font(40), base_color="BLACK", hovering_color="GREEN")
+                            text_input="BACK", font=get_font(40), base_color="WHITE", hovering_color="GREEN")
         OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
         OPTIONS_BACK.update(SCREEN)
 
