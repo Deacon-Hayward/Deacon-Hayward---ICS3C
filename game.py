@@ -1,7 +1,8 @@
-import pygame, sys
+import pygame, sys, os
 from button import Button
 
 pygame.init()
+pygame.mixer.init()
 
 # Set screen resolution
 SCREEN = pygame.display.set_mode((800,600))
@@ -21,11 +22,19 @@ BLACK = (0, 0, 0)
 SKYBLUE = (135, 206, 235)
 ORANGE = (255, 165, 0)
 
-
+# Images
 JUMPSCARE_IMG = pygame.image.load("assets/Brimley.png")
 JUMPSCARE_IMG = pygame.transform.scale(JUMPSCARE_IMG, (SCREEN_WIDTH, SCREEN_HEIGHT))
 WIN_IMG = pygame.image.load("assets/Brimley_Happy.png")
 WIN_IMG = pygame.transform.scale(WIN_IMG, (SCREEN_WIDTH, SCREEN_HEIGHT))
+
+# Secret Found Sound
+SECRET_SOUND = pygame.mixer.Sound("assets/Secret_Found.mp3")
+SECRET_SOUND.set_volume(0.8)
+
+# Collision Sound
+DEAD_SOUND = pygame.mixer.Sound("assets/Scream_Dead.mp3")
+DEAD_SOUND.set_volume(1.0)
 
 def triggerwin():
     if WIN_IMG:
@@ -36,6 +45,7 @@ def triggerwin():
     pygame.display.update()
     pygame.time.delay(2000)
 def trigger_jumpscare():
+    DEAD_SOUND.play()
     if JUMPSCARE_IMG:
         SCREEN.blit(JUMPSCARE_IMG, (0, 0))
     else:
@@ -276,12 +286,15 @@ def game():
                 message = font.render("YOU LOSE!", True, RED)
                 screen.blit(message, (220, 180))
                 trigger_jumpscare()
+                DEAD_SOUND.play()
                 pygame.display.flip()
                 running = False
 
-            # Check if the player reaches the lever
-            if player.colliderect(lever_rect):
+            player = pygame.Rect(player_x, player_y, player_size, player_size)
+
+            if not lever_activated and player.colliderect(lever_rect):
                 lever_activated = True
+                SECRET_SOUND.play()
 
             # Check if the player reaches the exit
             if player.colliderect(exit_rect):
