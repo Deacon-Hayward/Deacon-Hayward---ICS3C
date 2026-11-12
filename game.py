@@ -24,7 +24,17 @@ ORANGE = (255, 165, 0)
 
 JUMPSCARE_IMG = pygame.image.load("assets/Brimley.png")
 JUMPSCARE_IMG = pygame.transform.scale(JUMPSCARE_IMG, (SCREEN_WIDTH, SCREEN_HEIGHT))
+WIN_IMG = pygame.image.load("assets/Brimley_Happy.png")
+WIN_IMG = pygame.transform.scale(WIN_IMG, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
+def triggerwin():
+    if WIN_IMG:
+        screen.blit(WIN_IMG, (0, 0))
+    else:
+        SCREEN.fill(RED)
+
+    pygame.display.update()
+    pygame.time.delay(2000)
 def trigger_jumpscare():
     if JUMPSCARE_IMG:
         SCREEN.blit(JUMPSCARE_IMG, (0, 0))
@@ -321,6 +331,7 @@ def game():
             font = pygame.font.SysFont(None, 48)
             message = font.render("YOU WIN!", True, GREEN)
             screen.blit(message, (220, 180))
+            triggerwin()
 
         # Update the display
         pygame.display.flip()
