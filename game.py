@@ -11,7 +11,6 @@ SCREEN_HEIGHT = 600
 
 # Create the game window
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Maze Game")
 
 # Set up colours
 WHITE = (255, 255, 255)
@@ -350,7 +349,7 @@ def game():
         pygame.display.flip()
 
         # Limit the game to 60 FPS
-        clock.tick(60)
+        clock.tick(60) 
 
     # Close Pygame
     pygame.quit()
@@ -361,7 +360,7 @@ def get_font(size):
     return pygame.font.Font("assets/font.ttf", size)
 
 def play():
-    pygame.display.set_caption("Play")
+    pygame.display.set_caption("Maze To Save Brimley")
 
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
